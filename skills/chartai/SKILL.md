@@ -61,13 +61,19 @@ Never print or repeat the raw key.
 2. Use `search_symbols` or `resolve_symbol` before scanning if the user gives a
    common ticker such as `BTC`, `ETH`, `TSLA`, or `XAU`.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
-4. Use `get_context` for the chosen context before making a judgment.
+4. Use `inspect_chart_context` for the chosen context before making a judgment.
+   This is the default Chart Context path: visually inspect the native Core
+   chart first, then use structured Chart Context fields to verify the visual
+   read.
 5. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-6. Use `get_chart` if the user or agent needs the chart artifact.
-7. Use `get_usage` to explain quota and confirm supplemental indicator facts
+6. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-8. For subscriptions, use monitors/feed instead of repeatedly rescanning.
+7. For subscriptions, use monitors/feed instead of repeatedly rescanning.
+
+If the runtime has no visual ability, explicitly say that you did not visually
+inspect the chart. Do not imply you saw candle structure, overlays, labels, or
+pattern geometry from text-only data.
 
 ## Actions
 
@@ -78,8 +84,13 @@ Never print or repeat the raw key.
 - `resolve_symbol`: resolve tickers such as BTC, ETH, TSLA, or XAUUSD.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
 - `scan_contexts`: get current Chart Contexts for a symbol and timeframe.
+- `inspect_chart_context`: fetch the native chart plus structured inspection
+  payload for a context. Defaults to the Core 1920x1080 chart unless the agent
+  explicitly requests another size.
 - `get_context`: fetch one context by `context_id`.
-- `get_chart`: fetch the chart image package for a context.
+- `get_chart`: fetch the chart image package for a context. Keep this for
+  compatibility or explicit raw chart requests; do not use it as the default
+  judgment path.
 - `get_record`, `search_records`: read detection history/status records within
   retention.
 - `check_context_condition`: ask supplemental indicator questions such as
@@ -106,6 +117,17 @@ Scan BTC on the 1h timeframe:
     "symbol": "BINANCE:BTCUSDT",
     "timeframe": "1h",
     "limit": 5
+  }
+}
+```
+
+Inspect the chosen Chart Context before judgment:
+
+```json
+{
+  "action": "inspect_chart_context",
+  "input": {
+    "context_id": "ctx_12345"
   }
 }
 ```
@@ -153,4 +175,3 @@ Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `response_too_large`, `server_busy`, `service_timeout`, and `internal_error`.
 
 `GET https://skill-staging.chartai.live/manifest.json` is public discovery.
-
