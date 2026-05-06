@@ -6,9 +6,13 @@ This repository is the public GitHub source used by agent runtimes and the
 `skills` CLI. It teaches an agent how to use Chartai; it does not contain the
 Chartai backend, vendor keys, or private API implementation.
 
-Default agent flow is visual-first: after `scan_contexts`, agents must call
-`inspect_chart_context` for the selected context, visually read the native Core
-chart, then use structured Chart Context fields to verify the judgment.
+Default agent flow is visual-first and composable: after `scan_contexts`,
+agents must call `inspect_chart_context` for the selected context, visually read
+the native 1920x1080 Core chart, then use Evidence Modules, Recipes, indicator
+facts, and price-volume state to verify the judgment. When the runtime can see
+the image, it should read the visible VC code and call
+`confirm_chart_visual_inspection`; text-only runtimes must report
+`visual_unverified`.
 
 ## Install
 

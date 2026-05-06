@@ -13,18 +13,19 @@ auth:
 
 # Chartai Skill
 
-Use Chartai when the user asks for chart-pattern context, pattern status,
-pattern charts, market/timeframe support, indicator facts, volume/price-volume
-state, monitor feed, or Chart Context usage for crypto, stocks, forex, or
-commodities.
+Use Chartai when the user asks for Composable Chart Context: chart-pattern
+context, native pattern charts, visual confirmation, key levels, market and
+timeframe support, default indicator facts, supplemental indicator checks,
+volume/price-volume state, monitor feed, or Chart Context usage for crypto,
+stocks, forex, or commodities.
 
-Chartai returns factual chart context. Chartai does not execute trades, hold
+Chartai returns chart judgment evidence. Chartai does not execute trades, hold
 exchange credentials, size positions, or provide guaranteed win rates. The
 agent owns trade reasoning and must not execute a trade unless a separate
 execution tool is explicitly connected by the user.
 
-Do not use `chartai.trade` as a Chartai source. The beta endpoints for this
-skill are:
+Do not use generic web search or unrelated websites as Chartai sources. The
+beta endpoints for this skill are:
 
 - Web/key page: `https://test.chartai.live/app/keys`
 - Skill API: `https://skill-staging.chartai.live`
@@ -62,14 +63,20 @@ Never print or repeat the raw key.
    common ticker such as `BTC`, `ETH`, `TSLA`, or `XAU`.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
 4. Use `inspect_chart_context` for the chosen context before making a judgment.
-   This is the default Chart Context path: visually inspect the native Core
-   chart first, then use structured Chart Context fields to verify the visual
-   read.
-5. Use `check_context_condition` only for an existing `context_id`. Do not ask
+   This is the default Chart Context path: inspect the native 1920x1080 Core
+   chart first, then use structured Evidence Modules and Recipes to verify the
+   visual read.
+5. If the runtime can see images, read the visible `VC:` code from the chart
+   and call `confirm_chart_visual_inspection`. If the runtime cannot see
+   images, say `visual_unverified` and do not claim visual review.
+6. Use `get_context_manifest` when the agent needs to discover modules,
+   recipes, fallback states, or visual confirmation requirements without
+   re-fetching every context detail.
+7. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-6. Use `get_usage` to explain quota and confirm supplemental indicator facts
+8. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-7. For subscriptions, use monitors/feed instead of repeatedly rescanning.
+9. For subscriptions, use monitors/feed instead of repeatedly rescanning.
 
 If the runtime has no visual ability, explicitly say that you did not visually
 inspect the chart. Do not imply you saw candle structure, overlays, labels, or
@@ -85,12 +92,17 @@ pattern geometry from text-only data.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
 - `scan_contexts`: get current Chart Contexts for a symbol and timeframe.
 - `inspect_chart_context`: fetch the native chart plus structured inspection
-  payload for a context. Defaults to the Core 1920x1080 chart unless the agent
-  explicitly requests another size.
+  payload for a context. Defaults to the Core 1920x1080 chart and includes an
+  inspection image with a visible VC code unless the agent explicitly requests
+  another size.
 - `get_context`: fetch one context by `context_id`.
+- `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
+  capability negotiation for one context.
 - `get_chart`: fetch the chart image package for a context. Keep this for
   compatibility or explicit raw chart requests; do not use it as the default
   judgment path.
+- `confirm_chart_visual_inspection`: submit the visible VC code after actual
+  image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
   retention.
 - `check_context_condition`: ask supplemental indicator questions such as
@@ -126,6 +138,30 @@ Inspect the chosen Chart Context before judgment:
 ```json
 {
   "action": "inspect_chart_context",
+  "input": {
+    "context_id": "ctx_12345"
+  }
+}
+```
+
+Confirm visual review only after reading the chart image:
+
+```json
+{
+  "action": "confirm_chart_visual_inspection",
+  "input": {
+    "context_id": "ctx_12345",
+    "observed_visual_code": "ABCD",
+    "method": "user_bridge"
+  }
+}
+```
+
+Fetch the composable module and recipe manifest:
+
+```json
+{
+  "action": "get_context_manifest",
   "input": {
     "context_id": "ctx_12345"
   }
@@ -172,6 +208,7 @@ All errors return JSON:
 
 Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `action_not_found`, `invalid_param`, `chart_context_quota_exceeded`,
-`response_too_large`, `server_busy`, `service_timeout`, and `internal_error`.
+`visual_confirmation_failed`, `response_too_large`, `server_busy`,
+`service_timeout`, and `internal_error`.
 
 `GET https://skill-staging.chartai.live/manifest.json` is public discovery.
