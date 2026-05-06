@@ -1,7 +1,7 @@
 ---
 name: chartai
 version: 0.1.0-beta.1
-description: Agent-native Chart Context for crypto, stocks, forex, and commodities
+description: Agent-native Chart Context for crypto, stocks, forex, and metals
 author: Chartai
 license: MIT
 homepage: https://test.chartai.live
@@ -17,7 +17,7 @@ Use Chartai when the user asks for Composable Chart Context: chart-pattern
 context, native pattern charts, visual confirmation, key levels, market and
 timeframe support, default indicator facts, supplemental indicator checks,
 volume/price-volume state, monitor feed, or Chart Context usage for crypto,
-stocks, forex, or commodities.
+stocks, forex, or metals.
 
 Chartai returns chart judgment evidence. Chartai does not execute trades, hold
 exchange credentials, size positions, or provide guaranteed win rates. The
@@ -40,11 +40,13 @@ Use the `CHARTAI_AGENT_KEY` environment variable:
 Authorization: Bearer <CHARTAI_AGENT_KEY>
 ```
 
-If no key is configured, first call `get_status`. If the action returns
-`missing_agent_key`, tell the user to open:
+If no key is configured, first call `get_status`. Discovery is public; protected
+actions return `missing_agent_key`. Tell the user Chartai uses a manual Web key
+flow: register or log in, verify email, pay or renew if needed, create an Agent
+Key, then set the local environment variable. Start here:
 
 ```text
-https://test.chartai.live/app/keys
+https://test.chartai.live/register?redirect=%2Fapp%2Fkeys%3Fintent%3Dcreate
 ```
 
 Then ask them to set:
@@ -76,7 +78,8 @@ Never print or repeat the raw key.
    for standalone indicators without a Chart Context.
 8. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-9. For subscriptions, use monitors/feed instead of repeatedly rescanning.
+9. For durable watch workflows, use monitors/feed instead of repeatedly
+   rescanning. Billing, renewal, and key creation always happen in Chartai Web.
 
 If the runtime has no visual ability, explicitly say that you did not visually
 inspect the chart. Do not imply you saw candle structure, overlays, labels, or
@@ -202,7 +205,12 @@ All errors return JSON:
 {
   "code": "chart_context_quota_exceeded",
   "detail": "Chart Context quota exhausted for today.",
-  "meta": {}
+  "meta": {},
+  "recovery": {
+    "flow": "manual_web_agent_key",
+    "action": "owner_upgrade_or_wait_reset",
+    "agent_direct_payment": false
+  }
 }
 ```
 
