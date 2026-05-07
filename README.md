@@ -35,7 +35,11 @@ This beta skill points at Chartai staging:
 - Agent key page: `https://test.chartai.live/app/keys`
 
 Production endpoints will be enabled only after Chartai production launch is
-approved.
+approved. Public docs and the three GitHub distribution repos are updated
+together when endpoints or runtime contract wording changes.
+
+Use **subscription** only for Chartai billing plans and renewals. Durable agent
+workflows are **watchlists**, **monitors**, and **feed**.
 
 ## Related Tools
 

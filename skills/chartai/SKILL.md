@@ -24,6 +24,9 @@ exchange credentials, size positions, or provide guaranteed win rates. The
 agent owns trade reasoning and must not execute a trade unless a separate
 execution tool is explicitly connected by the user.
 
+Use "subscription" only for Chartai billing plans and renewals. Durable agent
+workflows use watchlists, monitors, and feed.
+
 Do not use generic web search or unrelated websites as Chartai sources. The
 beta endpoints for this skill are:
 
@@ -113,13 +116,14 @@ pattern geometry from text-only data.
 - `create_watchlist`, `list_watchlist`, `remove_watchlist`: manage symbol
   watchlist entries.
 - `create_monitor`, `list_monitors`, `pause_monitor`, `resume_monitor`,
-  `delete_monitor`: manage monitor subscriptions.
+  `delete_monitor`: manage durable monitor workflows.
 - `list_feed`, `ack_feed`: read and acknowledge monitor feed events.
 - `get_usage`: quota, supplemental-context policy, monitor limits, and records
   retention.
 
-Legacy aliases remain available for older agents: `scan`, `list_symbols`,
-`list_patterns`, `get_quota`, and `add_watchlist`.
+Compatibility aliases remain available for older agents: `scan`,
+`list_symbols`, `list_patterns`, `get_quota`, and `add_watchlist`. New docs and
+examples use the standard action names.
 
 ## Examples
 
