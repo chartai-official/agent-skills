@@ -67,21 +67,25 @@ Never print or repeat the raw key.
 2. Use `search_symbols` or `resolve_symbol` before scanning if the user gives a
    common ticker such as `BTC`, `ETH`, `TSLA`, or `XAU`.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
-4. Use `inspect_chart_context` for the chosen context before making a judgment.
+4. Treat the returned `context_id` as the decision evidence ID. Preserve and
+   reuse it; do not construct a context id yourself.
+5. Use `inspect_chart_context` for the chosen context before making a judgment.
    This is the default Chart Context path: inspect the native 1920x1080 Core
    chart first, then use structured Evidence Modules and Recipes to verify the
    visual read.
-5. If the runtime can see images, read the visible `VC:` code from the chart
+6. If the runtime can see images, read the visible `VC:` code from the chart
    and call `confirm_chart_visual_inspection`. If the runtime cannot see
    images, say `visual_unverified` and do not claim visual review.
-6. Use `get_context_manifest` when the agent needs to discover modules,
+7. Use `get_context_manifest` when the agent needs to discover modules,
    recipes, fallback states, or visual confirmation requirements without
    re-fetching every context detail.
-7. Use `check_context_condition` only for an existing `context_id`. Do not ask
+8. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-8. Use `get_usage` to explain quota and confirm supplemental indicator facts
+9. Use `get_record` and `search_records` with `detection_id` only for historical
+   lifecycle records, not as the primary current-decision reference.
+10. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-9. For durable watch workflows, use monitors/feed instead of repeatedly
+11. For durable watch workflows, use monitors/feed instead of repeatedly
    rescanning. Billing, renewal, and key creation always happen in Chartai Web.
 
 If the runtime has no visual ability, explicitly say that you did not visually

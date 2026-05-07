@@ -41,6 +41,11 @@ together when endpoints or runtime contract wording changes.
 Use **subscription** only for Chartai billing plans and renewals. Durable agent
 workflows are **watchlists**, **monitors**, and **feed**.
 
+Agent reference contract: `scan_contexts` discovers current Chart Context;
+`context_id` is the decision evidence ID returned by Chartai and must be treated
+as opaque; `get_record` and `search_records` use `detection_id` for historical
+lifecycle records.
+
 ## Related Tools
 
 Install the CLI from GitHub:
