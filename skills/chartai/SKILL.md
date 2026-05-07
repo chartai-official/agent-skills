@@ -104,9 +104,8 @@ pattern geometry from text-only data.
 - `get_context`: fetch one context by `context_id`.
 - `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
   capability negotiation for one context.
-- `get_chart`: fetch the chart image package for a context. Keep this for
-  compatibility or explicit raw chart requests; do not use it as the default
-  judgment path.
+- `get_chart`: fetch the chart image package for a context only when explicit
+  raw chart access is needed; do not use it as the default judgment path.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
   image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
@@ -120,10 +119,6 @@ pattern geometry from text-only data.
 - `list_feed`, `ack_feed`: read and acknowledge monitor feed events.
 - `get_usage`: quota, supplemental-context policy, monitor limits, and records
   retention.
-
-Compatibility aliases remain available for older agents: `scan`,
-`list_symbols`, `list_patterns`, `get_quota`, and `add_watchlist`. New docs and
-examples use the standard action names.
 
 ## Examples
 
