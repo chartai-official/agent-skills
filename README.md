@@ -3,7 +3,7 @@
 Agent-installable Chartai skill pack for Chart Context research.
 
 This repository is the public GitHub source used by agent runtimes and the
-`skills` CLI. It teaches an agent how to use Chartai; it does not contain the
+`skills` CLI. It teaches an agent how to use Chartai. It does not contain the
 Chartai backend, vendor keys, or private API implementation.
 
 Default agent flow is visual-first and composable: after `scan_contexts`,
@@ -34,17 +34,16 @@ This beta skill points at Chartai staging:
 - Skill API: `https://skill-staging.chartai.live`
 - Agent key page: `https://test.chartai.live/app/keys`
 
-Production endpoints will be enabled only after Chartai production launch is
-approved. Public docs and the three GitHub distribution repos are updated
-together when endpoints or runtime contract wording changes.
+Use the endpoints shown here for the beta runtime. Production URLs will be
+published in Chartai docs when launch opens.
 
 Use **subscription** only for Chartai billing plans and renewals. Durable agent
 workflows are **watchlists**, **monitors**, and **feed**.
 
-Agent reference contract: `scan_contexts` discovers current Chart Context;
-`context_id` is the decision evidence ID returned by Chartai and must be treated
-as opaque; `get_record` and `search_records` use `detection_id` for historical
-lifecycle records.
+Agent flow: use `scan_contexts` to find current Chart Context, then use
+`inspect_chart_context` before making a judgment. Keep the returned `context_id`
+as the decision evidence ID. Use `get_record` and `search_records` with
+`detection_id` only when you need historical lifecycle records.
 
 ## Related Tools
 
