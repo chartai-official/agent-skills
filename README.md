@@ -1,17 +1,12 @@
 # Chartai Agent Skills
 
-Agent-installable Chartai skill pack for Chart Context research.
+Agent-installable Chartai skill pack for chart context for trading agents.
+It teaches an agent how to scan, inspect, confirm visuals, watch symbols, read
+feed events, and check usage.
 
-This repository is the public GitHub source used by agent runtimes and the
-`skills` CLI. It teaches an agent how to use Chartai. It does not contain the
-Chartai backend, vendor keys, or private API implementation.
-
-Default agent flow is visual-first and composable: after `scan_contexts`,
-agents must call `inspect_chart_context` for the selected context, visually read
-the native 1920x1080 Core chart, then use Evidence Modules, Recipes, indicator
-facts, and price-volume state to verify the judgment. When the runtime can see
-the image, it should read the visible VC code and call
-`confirm_chart_visual_inspection`; text-only runtimes must report
+Default flow: call `scan_contexts`, choose a context, then call
+`inspect_chart_context`. If the runtime can see the chart, read the visible VC
+code and call `confirm_chart_visual_inspection`. Text-only runtimes must report
 `visual_unverified`.
 
 ## Install
@@ -26,16 +21,13 @@ To install for a specific agent runtime:
 npx skills add chartai-official/agent-skills --skill chartai --agent claude-code --global --yes --copy
 ```
 
-## Runtime Endpoints
+## Endpoints
 
-This beta skill points at Chartai staging:
+Default endpoints:
 
-- Web: `https://test.chartai.live`
-- Skill API: `https://skill-staging.chartai.live`
-- Agent key page: `https://test.chartai.live/app/keys`
-
-Use the endpoints shown here for the beta runtime. Production URLs will be
-published in Chartai docs when launch opens.
+- Web: `https://chartai.live`
+- Skill API: `https://skill.chartai.live`
+- Agent key page: `https://chartai.live/app/keys`
 
 Use **subscription** only for Chartai billing plans and renewals. Durable agent
 workflows are **watchlists**, **monitors**, and **feed**.

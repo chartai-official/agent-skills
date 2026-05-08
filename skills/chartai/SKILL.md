@@ -4,8 +4,8 @@ version: 0.1.0-beta.1
 description: Agent-native Chart Context for crypto, stocks, forex, and metals
 author: Chartai
 license: MIT
-homepage: https://test.chartai.live
-api_url: https://skill-staging.chartai.live
+homepage: https://chartai.live
+api_url: https://skill.chartai.live
 auth:
   type: bearer
   token_env: CHARTAI_AGENT_KEY
@@ -28,12 +28,12 @@ Use "subscription" only for Chartai billing plans and renewals. Durable agent
 workflows use watchlists, monitors, and feed.
 
 Do not use generic web search or unrelated websites as Chartai sources. The
-beta endpoints for this skill are:
+Chartai endpoints for this skill are:
 
-- Web/key page: `https://test.chartai.live/app/keys`
-- Skill API: `https://skill-staging.chartai.live`
-- MCP: `https://mcp-staging.chartai.live/mcp`
-- Public website: `https://test.chartai.live`
+- Web/key page: `https://chartai.live/app/keys`
+- Skill API: `https://skill.chartai.live`
+- MCP: `https://mcp.chartai.live/mcp`
+- Public website: `https://chartai.live`
 
 ## Authentication
 
@@ -43,13 +43,13 @@ Use the `CHARTAI_AGENT_KEY` environment variable:
 Authorization: Bearer <CHARTAI_AGENT_KEY>
 ```
 
-If no key is configured, first call `get_status`. Discovery is public; protected
-actions return `missing_agent_key`. Tell the user Chartai uses a manual Web key
-flow: register or log in, verify email, pay or renew if needed, create an Agent
-Key, then set the local environment variable. Start here:
+If no key is configured, first call `get_status`. Discovery is public.
+Protected actions return `missing_agent_key`. Tell the user to use the manual
+Web key flow: register or log in, verify email, pay or renew if needed, create
+an Agent Key, then set the local environment variable. Start here:
 
 ```text
-https://test.chartai.live/register?redirect=%2Fapp%2Fkeys%3Fintent%3Dcreate
+https://chartai.live/register?redirect=%2Fapp%2Fkeys%3Fintent%3Dcreate
 ```
 
 Then ask them to set:
@@ -68,7 +68,7 @@ Never print or repeat the raw key.
    common ticker such as `BTC`, `ETH`, `TSLA`, or `XAU`.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
 4. Treat the returned `context_id` as the decision evidence ID. Preserve and
-   reuse it; do not construct a context id yourself.
+   reuse it. Do not construct a context id yourself.
 5. Use `inspect_chart_context` for the chosen context before making a judgment.
    This is the default Chart Context path: inspect the native 1920x1080 Core
    chart first, then use structured Evidence Modules and Recipes to verify the
@@ -109,7 +109,7 @@ pattern geometry from text-only data.
 - `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
   capability negotiation for one context.
 - `get_chart`: fetch the chart image package for a context only when explicit
-  raw chart access is needed; do not use it as the default judgment path.
+  raw chart access is needed. Do not use it as the default judgment path.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
   image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
@@ -222,4 +222,4 @@ Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `visual_confirmation_failed`, `response_too_large`, `server_busy`,
 `service_timeout`, and `internal_error`.
 
-`GET https://skill-staging.chartai.live/manifest.json` is public discovery.
+`GET https://skill.chartai.live/manifest.json` is public discovery.
