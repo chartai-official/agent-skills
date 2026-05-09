@@ -44,9 +44,9 @@ discovery is not a guarantee that a ready Chart Context exists right now;
 `scan_contexts` returns current contexts only when Chartai has a ready native
 chart for that symbol/timeframe.
 
-If any action returns an error with `guidance`, follow `guidance.next_actions`
-before changing symbols, timeframes, ids, or action names. Do not guess a
-fallback query.
+Agent-facing errors include `guidance`; follow `guidance.next_actions` before
+changing symbols, timeframes, ids, or action names. Do not guess a fallback
+query.
 
 ## Related Tools
 

@@ -237,7 +237,7 @@ Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `visual_confirmation_failed`, `response_too_large`, `server_busy`,
 `service_timeout`, and `internal_error`.
 
-When an error includes `guidance`, follow `guidance.next_actions` before
+Agent-facing errors include `guidance`; follow `guidance.next_actions` before
 changing symbols, timeframes, ids, or action names. Do not guess a fallback
 query.
 
