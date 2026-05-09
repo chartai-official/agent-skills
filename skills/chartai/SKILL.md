@@ -217,6 +217,13 @@ All errors return JSON:
   "code": "chart_context_quota_exceeded",
   "detail": "Chart Context quota exhausted for today.",
   "meta": {},
+  "guidance": {
+    "do_not_guess": true,
+    "next_actions": [
+      {"action": "get_status"},
+      {"action": "get_usage"}
+    ]
+  },
   "recovery": {
     "flow": "manual_web_agent_key",
     "action": "owner_upgrade_or_wait_reset",
@@ -229,5 +236,9 @@ Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `action_not_found`, `invalid_param`, `chart_context_quota_exceeded`,
 `visual_confirmation_failed`, `response_too_large`, `server_busy`,
 `service_timeout`, and `internal_error`.
+
+When an error includes `guidance`, follow `guidance.next_actions` before
+changing symbols, timeframes, ids, or action names. Do not guess a fallback
+query.
 
 `GET https://skill.chartai.live/manifest.json` is public discovery.
