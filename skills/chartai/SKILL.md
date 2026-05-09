@@ -74,6 +74,10 @@ Never print or repeat the raw key.
    Discovery means Chartai can normalize the symbol. `scan_contexts` only
    returns current Chart Contexts when a ready native chart exists for that
    symbol/timeframe.
+   `search_symbols` is paginated for crypto, US stocks, and forex/metals. If
+   the response has `has_more=true`, call `search_symbols` again with
+   `next_cursor` until `has_more=false`. Do not treat the first 100 results as
+   the full catalog.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
 4. Treat the returned `context_id` as the decision evidence ID. Preserve and
    reuse it. Do not construct a context id yourself.
@@ -94,7 +98,9 @@ Never print or repeat the raw key.
 10. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
 11. For durable watch workflows, use monitors/feed instead of repeatedly
-   rescanning. Billing, renewal, and key creation always happen in Chartai Web.
+   rescanning. `list_feed` is paginated; if `has_more=true`, call it again with
+   `next_cursor` until `has_more=false`. Billing, renewal, and key creation
+   always happen in Chartai Web.
 
 If the runtime has no visual ability, explicitly say that you did not visually
 inspect the chart. Do not imply you saw candle structure, overlays, labels, or
@@ -105,7 +111,9 @@ pattern geometry from text-only data.
 - `get_status`: no-key onboarding and integration status.
 - `get_capabilities`: supported markets, symbol discovery counts, timeframes, patterns,
   indicators, conditions, and usage policy.
-- `search_symbols`: discover supported symbols.
+- `search_symbols`: discover supported symbols. Responses include
+  `returned_count`, `total_count`, `has_more`, and `next_cursor`; keep paging
+  until `has_more=false`.
 - `resolve_symbol`: resolve tickers such as BTC, ETH, TSLA, or XAUUSD.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
 - `scan_contexts`: get current Chart Contexts for a symbol and timeframe.
@@ -128,7 +136,9 @@ pattern geometry from text-only data.
   watchlist entries.
 - `create_monitor`, `list_monitors`, `pause_monitor`, `resume_monitor`,
   `delete_monitor`: manage durable monitor workflows.
-- `list_feed`, `ack_feed`: read and acknowledge monitor feed events.
+- `list_feed`, `ack_feed`: read and acknowledge monitor feed events. Feed
+  responses include `returned_count`, `has_more`, and `next_cursor`; keep
+  paging until `has_more=false`.
 - `get_usage`: quota, supplemental-context policy, monitor limits, and records
   retention.
 

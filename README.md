@@ -43,6 +43,12 @@ symbols such as `BINANCE:TRXUSDT`, `AAPL.US`, and `OANDA:EUR_USD`. Symbol
 discovery is not a guarantee that a ready Chart Context exists right now;
 `scan_contexts` returns current contexts only when Chartai has a ready native
 chart for that symbol/timeframe.
+`search_symbols` is paginated across crypto, US stocks, and forex/metals. If
+`has_more=true`, call it again with `next_cursor` until `has_more=false`. Do not
+treat a first page of 100 as the full catalog.
+`list_feed` is also paginated. When `has_more=true`, continue with the returned
+`next_cursor` until `has_more=false`; do not treat the first feed page as all
+monitor events.
 
 Agent-facing errors include `guidance`; follow `guidance.next_actions` before
 changing symbols, timeframes, ids, or action names. Do not guess a fallback
