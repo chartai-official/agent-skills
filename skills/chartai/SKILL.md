@@ -65,7 +65,15 @@ Never print or repeat the raw key.
 1. Call `get_status` and `get_capabilities` to learn supported markets,
    patterns, timeframes, indicators, quota, and guardrails.
 2. Use `search_symbols` or `resolve_symbol` before scanning if the user gives a
-   common ticker such as `BTC`, `ETH`, `TSLA`, or `XAU`.
+   common ticker such as `BTC`, `TRX`, `AAPL`, `NASDAQ:AAPL`, `FX:EURUSD`,
+   or `XAU`.
+   - Crypto resolves to provider symbols such as `BINANCE:BTCUSDT` and
+     `BINANCE:TRXUSDT`.
+   - US stock aliases resolve to `.US` provider symbols such as `AAPL.US`.
+   - Forex/metals aliases resolve to OANDA symbols such as `OANDA:EUR_USD`.
+   Discovery means Chartai can normalize the symbol. `scan_contexts` only
+   returns current Chart Contexts when a ready native chart exists for that
+   symbol/timeframe.
 3. Use `scan_contexts` to get current Chart Contexts for a symbol/timeframe.
 4. Treat the returned `context_id` as the decision evidence ID. Preserve and
    reuse it. Do not construct a context id yourself.
@@ -95,7 +103,7 @@ pattern geometry from text-only data.
 ## Actions
 
 - `get_status`: no-key onboarding and integration status.
-- `get_capabilities`: supported markets, symbols, timeframes, patterns,
+- `get_capabilities`: supported markets, symbol discovery counts, timeframes, patterns,
   indicators, conditions, and usage policy.
 - `search_symbols`: discover supported symbols.
 - `resolve_symbol`: resolve tickers such as BTC, ETH, TSLA, or XAUUSD.

@@ -37,6 +37,13 @@ Agent flow: use `scan_contexts` to find current Chart Context, then use
 as the decision evidence ID. Use `get_record` and `search_records` with
 `detection_id` only when you need historical lifecycle records.
 
+Use `search_symbols` and `resolve_symbol` for every user-provided ticker. Chartai
+normalizes crypto, US stock, and forex/metals aliases into provider canonical
+symbols such as `BINANCE:TRXUSDT`, `AAPL.US`, and `OANDA:EUR_USD`. Symbol
+discovery is not a guarantee that a ready Chart Context exists right now;
+`scan_contexts` returns current contexts only when Chartai has a ready native
+chart for that symbol/timeframe.
+
 ## Related Tools
 
 Install the CLI from GitHub:
