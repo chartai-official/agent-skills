@@ -71,9 +71,10 @@ Never print or repeat the raw key.
      `BINANCE:TRXUSDT`.
    - US stock aliases resolve to `.US` provider symbols such as `AAPL.US`.
    - Forex/metals aliases resolve to OANDA symbols such as `OANDA:EUR_USD`.
-   Discovery means Chartai can normalize the symbol. `scan_contexts` only
-   returns current Chart Contexts when a ready native chart exists for that
-   symbol/timeframe.
+   Discovery means Chartai can normalize the symbol. `scan_contexts` returns
+   current Chart Contexts only when a ready native chart exists for that
+   symbol/timeframe. No ready context? Chartai can queue a fresh scan; wait,
+   then retry the same query.
    `search_symbols` is paginated for crypto, US stocks, and forex/metals. If
    the response has `has_more=true`, call `search_symbols` again with
    `next_cursor` until `has_more=false`. Do not treat the first 100 results as
@@ -116,7 +117,7 @@ pattern geometry from text-only data.
   until `has_more=false`.
 - `resolve_symbol`: resolve tickers such as BTC, ETH, TSLA, or XAUUSD.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
-- `scan_contexts`: get current Chart Contexts for a symbol and timeframe.
+- `scan_contexts`: get current Chart Contexts. No ready context? Chartai can queue a fresh scan; wait, then retry the same query.
 - `inspect_chart_context`: fetch the native chart plus structured inspection
   payload for a context. Defaults to the Core 1920x1080 chart and includes an
   inspection image with a visible VC code unless the agent explicitly requests
