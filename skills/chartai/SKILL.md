@@ -16,8 +16,8 @@ auth:
 Use Chartai when the user asks for Composable Chart Context: chart-pattern
 context, native pattern charts, visual confirmation, key levels, market and
 timeframe support, default indicator facts, supplemental indicator checks,
-volume/price-volume state, monitor feed, or Chart Context usage for crypto,
-stocks, forex, or metals.
+context-bound OHLCV, volume/price-volume state, monitor feed, or Chart Context
+usage for crypto, stocks, forex, or metals.
 
 Chartai returns chart judgment evidence. Chartai does not execute trades, hold
 exchange credentials, size positions, or provide guaranteed win rates. The
@@ -92,13 +92,16 @@ Never print or repeat the raw key.
 7. Use `get_context_manifest` when the agent needs to discover modules,
    recipes, fallback states, or visual confirmation requirements without
    re-fetching every context detail.
-8. Use `check_context_condition` only for an existing `context_id`. Do not ask
+8. Use `get_context_ohlcv` only after a `context_id` has been selected, when
+   the agent needs the candles behind that context's chart window for audit.
+   Do not use it as a general price feed.
+9. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-9. Use `get_record` and `search_records` with `detection_id` only for historical
+10. Use `get_record` and `search_records` with `detection_id` only for historical
    lifecycle records, not as the primary current-decision reference.
-10. Use `get_usage` to explain quota and confirm supplemental indicator facts
+11. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-11. For durable watch workflows, use monitors/feed instead of repeatedly
+12. For durable watch workflows, use monitors/feed instead of repeatedly
    rescanning. `list_feed` is paginated; if `has_more=true`, call it again with
    `next_cursor` until `has_more=false`. Billing, renewal, and key creation
    always happen in Chartai Web.
@@ -125,6 +128,8 @@ pattern geometry from text-only data.
 - `get_context`: fetch one context by `context_id`.
 - `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
   capability negotiation for one context.
+- `get_context_ohlcv`: fetch the OHLCV candles attached to one selected Chart
+  Context's chart window. Use it for evidence audit, not standalone market data.
 - `get_chart`: fetch the chart image package for a context only when explicit
   raw chart access is needed. Do not use it as the default judgment path.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
@@ -187,6 +192,17 @@ Fetch the composable module and recipe manifest:
 ```json
 {
   "action": "get_context_manifest",
+  "input": {
+    "context_id": "ctx_12345"
+  }
+}
+```
+
+Fetch the candles behind the selected chart window:
+
+```json
+{
+  "action": "get_context_ohlcv",
   "input": {
     "context_id": "ctx_12345"
   }

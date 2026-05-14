@@ -7,7 +7,8 @@ feed events, and check usage.
 Default flow: call `scan_contexts`, choose a context, then call
 `inspect_chart_context`. If the runtime can see the chart, read the visible VC
 code and call `confirm_chart_visual_inspection`. Text-only runtimes must report
-`visual_unverified`.
+`visual_unverified`. Use `get_context_ohlcv` only after a context is selected,
+when the agent needs the candles behind that chart window for audit.
 
 ## Install
 
