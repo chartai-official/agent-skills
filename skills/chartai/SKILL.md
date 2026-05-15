@@ -94,7 +94,8 @@ Never print or repeat the raw key.
    re-fetching every context detail.
 8. Use `get_context_ohlcv` only after a `context_id` has been selected, when
    the agent needs the candles behind that context's chart window for audit.
-   Do not use it as a general price feed.
+   Pass `window: "wide"` for wider data-only context around the same Chart
+   Context. Do not use it as a general price feed.
 9. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
 10. Use `get_record` and `search_records` with `detection_id` only for historical
@@ -129,9 +130,12 @@ pattern geometry from text-only data.
 - `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
   capability negotiation for one context.
 - `get_context_ohlcv`: fetch the OHLCV candles attached to one selected Chart
-  Context's chart window. Use it for evidence audit, not standalone market data.
+  Context's chart window. Pass `window: "wide"` for wider data-only context when
+  the agent needs to draw distant levels. Use it for evidence audit, not standalone market data.
 - `get_chart`: fetch the chart image package for a context only when explicit
-  raw chart access is needed. Do not use it as the default judgment path.
+  raw chart access is needed. Pass `variant: "original"` for the persistent
+  wider-context candles + Volume + pattern-only image. Do not use it as the
+  default judgment path.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
   image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
@@ -205,6 +209,18 @@ Fetch the candles behind the selected chart window:
   "action": "get_context_ohlcv",
   "input": {
     "context_id": "ctx_12345"
+  }
+}
+```
+
+Fetch wider data-only candles for agent-side drawing:
+
+```json
+{
+  "action": "get_context_ohlcv",
+  "input": {
+    "context_id": "ctx_12345",
+    "window": "wide"
   }
 }
 ```

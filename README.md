@@ -8,7 +8,10 @@ Default flow: call `scan_contexts`, choose a context, then call
 `inspect_chart_context`. If the runtime can see the chart, read the visible VC
 code and call `confirm_chart_visual_inspection`. Text-only runtimes must report
 `visual_unverified`. Use `get_context_ohlcv` only after a context is selected,
-when the agent needs the candles behind that chart window for audit.
+when the agent needs the candles behind that chart window for audit; pass
+`window: "wide"` for wider data-only context around the same Chart Context. Use
+`get_chart` with `variant: "original"` when the agent needs a persistent clean
+image containing only wider-context candles, Volume, and the pattern geometry.
 
 ## Install
 
