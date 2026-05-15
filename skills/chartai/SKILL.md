@@ -83,7 +83,7 @@ Never print or repeat the raw key.
 4. Treat the returned `context_id` as the decision evidence ID. Preserve and
    reuse it. Do not construct a context id yourself.
 5. Use `inspect_chart_context` for the chosen context before making a judgment.
-   This is the default Chart Context path: inspect the native 1920x1080 Core
+   This is the default Chart Context path: inspect the native 1920x1080 Chartai
    chart first, then use structured Evidence Modules and Recipes to verify the
    visual read.
 6. If the runtime can see images, read the visible `VC:` code from the chart
@@ -96,13 +96,22 @@ Never print or repeat the raw key.
    the agent needs the candles behind that context's chart window for audit.
    Pass `window: "wide"` for wider data-only context around the same Chart
    Context. Do not use it as a general price feed.
-9. Use `check_context_condition` only for an existing `context_id`. Do not ask
+9. Use `render_agent_chart` when the agent has its own live thesis and needs a
+   permanent chart rendered by Chartai from a TradingView `symbol`, `interval`,
+   focus `range`, source `context_id` when the original pattern shape should
+   remain visible, structured overlays, and optional studies. This action
+   requires Pro, and each accepted request uses 5 Chart Context units.
+   Chartai may add safety margin around the focus range so labels and source
+   pattern shapes are not clipped. Send retest support/resistance areas as
+   zones, or as two-price Retest support/resistance overlays; use
+   Dynamic/Trendline labels only for sloped lines. Do not upload OHLCV.
+10. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-10. Use `get_record` and `search_records` with `detection_id` only for historical
+11. Use `get_record` and `search_records` with `detection_id` only for historical
    lifecycle records, not as the primary current-decision reference.
-11. Use `get_usage` to explain quota and confirm supplemental indicator facts
+12. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
-12. For durable watch workflows, use monitors/feed instead of repeatedly
+13. For durable watch workflows, use monitors/feed instead of repeatedly
    rescanning. `list_feed` is paginated; if `has_more=true`, call it again with
    `next_cursor` until `has_more=false`. Billing, renewal, and key creation
    always happen in Chartai Web.
@@ -123,9 +132,9 @@ pattern geometry from text-only data.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
 - `scan_contexts`: get current Chart Contexts. No ready context? Chartai can queue a fresh scan; wait, then retry the same query.
 - `inspect_chart_context`: fetch the native chart plus structured inspection
-  payload for a context. Defaults to the Core 1920x1080 chart and includes an
-  inspection image with a visible VC code unless the agent explicitly requests
-  another size.
+  payload for a context. Defaults to the Chartai 1920x1080 chart and includes
+  an inspection image with a visible VC code unless the agent explicitly
+  requests another size.
 - `get_context`: fetch one context by `context_id`.
 - `get_context_manifest`: fetch Evidence Modules, Recipes, visual status, and
   capability negotiation for one context.
@@ -136,6 +145,13 @@ pattern geometry from text-only data.
   raw chart access is needed. Pass `variant: "original"` for the persistent
   wider-context candles + Volume + pattern-only image. Do not use it as the
   default judgment path.
+- `render_agent_chart`: render a permanent agent-owned chart from a TradingView
+  symbol, interval, focus range, optional source context_id, structured
+  overlays, and optional studies. Requires Pro; each accepted request uses
+  5 Chart Context units. Include context_id to keep the original pattern shape;
+  Chartai may add safety margin around the focus range. Do not upload OHLCV;
+  send retest support/resistance areas as zones or two-price Retest overlays,
+  and use external live data only to decide what to ask Chartai to draw.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
   image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
@@ -225,6 +241,48 @@ Fetch wider data-only candles for agent-side drawing:
 }
 ```
 
+Render an agent-owned chart from a live thesis:
+
+```json
+{
+  "action": "render_agent_chart",
+  "input": {
+    "context_id": "ctx_12345",
+    "render_source": {
+      "type": "tradingview",
+      "symbol": "BINANCE:BTCUSDT",
+      "interval": "1h",
+      "range": {
+        "from": "2026-05-14T00:00:00Z",
+        "to": "2026-05-15T00:00:00Z"
+      }
+    },
+    "overlays": [
+      {"type": "price_level", "role": "entry", "price": 66000, "label": "Entry"},
+      {"type": "price_level", "role": "stop", "price": 64800, "label": "Stop"},
+      {"type": "price_level", "role": "target", "price": 68200, "label": "T1"},
+      {
+        "type": "trendline",
+        "role": "resistance",
+        "start_time": "2026-05-14T04:00:00Z",
+        "start_price": 67400,
+        "end_time": "2026-05-14T20:00:00Z",
+        "end_price": 66800,
+        "label": "Resistance"
+      }
+    ],
+    "studies": [
+      {"type": "volume"},
+      {"type": "ema", "length": 20}
+    ],
+    "analysis_basis": {
+      "source": "agent_external_market_data",
+      "not_used_for_render": true
+    }
+  }
+}
+```
+
 Ask whether price is above the 3-day VWAP for an existing context:
 
 ```json
@@ -278,7 +336,10 @@ All errors return JSON:
 Common codes: `missing_agent_key`, `invalid_agent_key`, `tier_insufficient`,
 `action_not_found`, `invalid_param`, `chart_context_quota_exceeded`,
 `visual_confirmation_failed`, `response_too_large`, `server_busy`,
-`service_timeout`, and `internal_error`.
+`service_timeout`, `agent_chart_generation_pending`,
+`agent_chart_pattern_not_found`,
+`agent_chart_range_conflicts_with_pattern_source`, `agent_chart_render_failed`,
+and `internal_error`.
 
 Agent-facing errors include `guidance`; follow `guidance.next_actions` before
 changing symbols, timeframes, ids, or action names. Do not guess a fallback
