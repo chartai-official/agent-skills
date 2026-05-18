@@ -96,18 +96,9 @@ Never print or repeat the raw key.
    the agent needs the candles behind that context's chart window for audit.
    Pass `window: "wide"` for wider data-only context around the same Chart
    Context. Do not use it as a general price feed.
-9. Use `render_agent_chart` when the agent has its own live thesis and needs a
-   permanent chart rendered by Chartai from a TradingView `symbol`, `interval`,
-   focus `range`, source `context_id` when the original pattern shape should
-   remain visible, structured overlays, and optional studies. This action
-   requires Pro, and each accepted request uses 5 Chart Context units.
-   Chartai may add safety margin around the focus range so labels and source
-   pattern shapes are not clipped. Send retest support/resistance areas as
-   zones, or as two-price Retest support/resistance overlays; use
-   Dynamic/Trendline labels only for sloped lines. Do not upload OHLCV.
-10. Use `check_context_condition` only for an existing `context_id`. Do not ask
+9. Use `check_context_condition` only for an existing `context_id`. Do not ask
    for standalone indicators without a Chart Context.
-11. Use `get_record` and `search_records` with `detection_id` only for historical
+10. Use `get_record` and `search_records` with `detection_id` only for historical
    lifecycle records, not as the primary current-decision reference.
 12. Use `get_usage` to explain quota and confirm supplemental indicator facts
    are context facts, not trade execution.
@@ -145,13 +136,6 @@ pattern geometry from text-only data.
   raw chart access is needed. Pass `variant: "original"` for the persistent
   wider-context candles + Volume + pattern-only image. Do not use it as the
   default judgment path.
-- `render_agent_chart`: render a permanent agent-owned chart from a TradingView
-  symbol, interval, focus range, optional source context_id, structured
-  overlays, and optional studies. Requires Pro; each accepted request uses
-  5 Chart Context units. Include context_id to keep the original pattern shape;
-  Chartai may add safety margin around the focus range. Do not upload OHLCV;
-  send retest support/resistance areas as zones or two-price Retest overlays,
-  and use external live data only to decide what to ask Chartai to draw.
 - `confirm_chart_visual_inspection`: submit the visible VC code after actual
   image review so the context can be decision-grade.
 - `get_record`, `search_records`: read detection history/status records within
@@ -237,48 +221,6 @@ Fetch wider data-only candles for agent-side drawing:
   "input": {
     "context_id": "ctx_12345",
     "window": "wide"
-  }
-}
-```
-
-Render an agent-owned chart from a live thesis:
-
-```json
-{
-  "action": "render_agent_chart",
-  "input": {
-    "context_id": "ctx_12345",
-    "render_source": {
-      "type": "tradingview",
-      "symbol": "BINANCE:BTCUSDT",
-      "interval": "1h",
-      "range": {
-        "from": "2026-05-14T00:00:00Z",
-        "to": "2026-05-15T00:00:00Z"
-      }
-    },
-    "overlays": [
-      {"type": "price_level", "role": "entry", "price": 66000, "label": "Entry"},
-      {"type": "price_level", "role": "stop", "price": 64800, "label": "Stop"},
-      {"type": "price_level", "role": "target", "price": 68200, "label": "T1"},
-      {
-        "type": "trendline",
-        "role": "resistance",
-        "start_time": "2026-05-14T04:00:00Z",
-        "start_price": 67400,
-        "end_time": "2026-05-14T20:00:00Z",
-        "end_price": 66800,
-        "label": "Resistance"
-      }
-    ],
-    "studies": [
-      {"type": "volume"},
-      {"type": "ema", "length": 20}
-    ],
-    "analysis_basis": {
-      "source": "agent_external_market_data",
-      "not_used_for_render": true
-    }
   }
 }
 ```

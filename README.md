@@ -12,15 +12,6 @@ when the agent needs the candles behind that chart window for audit; pass
 `window: "wide"` for wider data-only context around the same Chart Context. Use
 `get_chart` with `variant: "original"` when the agent needs a persistent clean
 image containing only wider-context candles, Volume, and the pattern geometry.
-Use `render_agent_chart` when the agent has its own live thesis and needs a
-permanent TradingView-based chart from a symbol, interval, focus range,
-optional source context id, and overlays. This action requires Pro, and each
-accepted request uses 5 Chart Context units. Include the context id to keep
-the original pattern shape; Chartai may add safety margin around the focus range
-so labels and source pattern shapes are not clipped. Send retest
-support/resistance areas as zones or two-price Retest support/resistance
-overlays; use Dynamic or Trendline labels only for sloped lines. Do not upload
-OHLCV.
 
 ## Install
 
