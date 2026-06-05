@@ -1,7 +1,7 @@
 ---
 name: chartai
 version: 0.1.0-beta.1
-description: Agent-native Chart Context for crypto, forex, and metals
+description: Agent-native Chart Context for crypto
 author: Chartai
 license: MIT
 homepage: https://chartai.live
@@ -17,7 +17,7 @@ Use Chartai when the user asks for Composable Chart Context: chart-pattern
 context, native pattern charts, visual confirmation, key levels, market and
 timeframe support, default indicator facts, supplemental indicator checks,
 context-bound OHLCV, volume/price-volume state, monitor feed, or Chart Context
-usage for crypto, forex, or metals.
+usage for crypto.
 
 Chartai returns chart judgment evidence. Chartai does not execute trades, hold
 exchange credentials, size positions, or provide guaranteed win rates. The
@@ -65,16 +65,14 @@ Never print or repeat the raw key.
 1. Call `get_status` and `get_capabilities` to learn supported markets,
    patterns, timeframes, indicators, quota, and guardrails.
 2. Use `search_symbols` or `resolve_symbol` before scanning if the user gives a
-   common ticker such as `BTC`, `TRX`, `FX:EURUSD`,
-   or `XAU`.
+   common crypto ticker such as `BTC`, `TRX`, or `SOL`.
    - Crypto resolves to provider symbols such as `BINANCE:BTCUSDT` and
      `BINANCE:TRXUSDT`.
-   - Forex/metals aliases resolve to OANDA symbols such as `OANDA:EUR_USD`.
    Discovery means Chartai can normalize the symbol. `scan_contexts` returns
    current Chart Contexts only when a ready native chart exists for that
    symbol/timeframe. No ready context? Chartai can queue a fresh scan; wait,
    then retry the same query.
-   `search_symbols` is paginated for crypto and forex/metals. If
+   `search_symbols` is paginated for crypto. If
    the response has `has_more=true`, call `search_symbols` again with
    `next_cursor` until `has_more=false`. Do not treat the first 100 results as
    the full catalog.
@@ -118,7 +116,7 @@ pattern geometry from text-only data.
 - `search_symbols`: discover supported symbols. Responses include
   `returned_count`, `total_count`, `has_more`, and `next_cursor`; keep paging
   until `has_more=false`.
-- `resolve_symbol`: resolve tickers such as BTC, ETH, TSLA, or XAUUSD.
+- `resolve_symbol`: resolve crypto tickers such as BTC, ETH, SOL, or TRX.
 - `get_timezone` / `set_timezone`: read or change the user timezone.
 - `scan_contexts`: get current Chart Contexts. No ready context? Chartai can queue a fresh scan; wait, then retry the same query.
 - `inspect_chart_context`: fetch the native chart plus structured inspection

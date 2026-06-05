@@ -42,13 +42,13 @@ as the decision evidence ID. Use `get_record` and `search_records` with
 `detection_id` only when you need historical lifecycle records.
 
 Use `search_symbols` and `resolve_symbol` for every user-provided ticker. Chartai
-normalizes crypto and forex/metals aliases into provider canonical symbols such
-as `BINANCE:TRXUSDT` and `OANDA:EUR_USD`. Symbol
+normalizes crypto aliases into provider canonical symbols such as
+`BINANCE:TRXUSDT`. Symbol
 discovery is not a guarantee that a ready Chart Context exists right now;
 `scan_contexts` returns current contexts only when Chartai has a ready native
 chart for that symbol/timeframe. No ready context? Chartai can queue a fresh
 scan; wait, then retry the same query.
-`search_symbols` is paginated across crypto and forex/metals. If
+`search_symbols` is paginated across crypto. If
 `has_more=true`, call it again with `next_cursor` until `has_more=false`. Do not
 treat a first page of 100 as the full catalog.
 `list_feed` is also paginated. When `has_more=true`, continue with the returned
