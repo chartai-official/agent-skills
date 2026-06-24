@@ -48,6 +48,8 @@ discovery is not a guarantee that a ready Chart Context exists right now;
 `scan_contexts` returns current contexts only when Chartai has a ready native
 chart for that symbol/timeframe. No ready context? Chartai can queue a fresh
 scan; wait, then retry the same query.
+Current scan timeframes are `30m`, `1h`, `4h`, and `1D`; do not request
+retired lower timeframes such as `5m` or `15m`.
 `search_symbols` is paginated across crypto. If
 `has_more=true`, call it again with `next_cursor` until `has_more=false`. Do not
 treat a first page of 100 as the full catalog.
